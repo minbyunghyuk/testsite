@@ -19,4 +19,9 @@ public class UserService {
 		UserVo userVo = userRepository.find(email, password);
 		return userVo;
 	}
+
+	public UserVo getUser(Long no) {
+		UserVo userVo = userRepository.find(no);
+		return userVo;
+	}
 }
