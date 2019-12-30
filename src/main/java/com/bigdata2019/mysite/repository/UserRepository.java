@@ -1,17 +1,26 @@
 package com.bigdata2019.mysite.repository;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bigdata2019.mysite.vo.UserVo;
 
 @Repository
 public class UserRepository {
+	
+	@Autowired
+	private SqlSession sqlSession;
+	
+	@Autowired
+	private DataSource dataSource;
 	
 	public UserVo find(Long no){
 		UserVo result = null;
@@ -20,7 +29,7 @@ public class UserRepository {
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql = 
 				"select no, name, email, gender" + 
@@ -38,8 +47,6 @@ public class UserRepository {
 				result.setEmail(rs.getString(3));
 				result.setGender(rs.getString(4));
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 클래스 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("에러:" + e);
 		} finally {
@@ -68,7 +75,7 @@ public class UserRepository {
 		ResultSet rs = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			
 			String sql = 
 				"select no, name" + 
@@ -86,8 +93,6 @@ public class UserRepository {
 				result.setNo(rs.getLong(1));
 				result.setName(rs.getString(2));
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 클래스 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("에러:" + e);
 		} finally {
@@ -115,7 +120,7 @@ public class UserRepository {
 		PreparedStatement pstmt = null;
 		
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 	
 			//SQL 준비
 			String sql = 
@@ -135,8 +140,6 @@ public class UserRepository {
 			int count = pstmt.executeUpdate();
 			result = (count == 1);
 			
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -153,15 +156,4 @@ public class UserRepository {
 		}
 		return result;
 	}
-	
-	private Connection getConnection() throws ClassNotFoundException, SQLException {
-		//1. JDBC Driver(Mysql) 로딩
-		Class.forName("com.mysql.jdbc.Driver");
-		
-		//2. 연결하기
-		String url = "jdbc:mysql://localhost:3306/webdb";
-		Connection conn = DriverManager.getConnection(url, "webdb", "webdb");
-		
-		return conn;
-	}	
 }
