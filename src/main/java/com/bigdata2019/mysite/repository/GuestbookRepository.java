@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.bigdata2019.mysite.vo.GuestbookVo;
 
+@Repository
 public class GuestbookRepository {
 	
 	public Boolean delete(Long no, String password) {
