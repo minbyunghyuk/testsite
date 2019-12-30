@@ -1,5 +1,8 @@
 package com.bigdata2019.security;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -39,8 +42,13 @@ public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgum
 			return WebArgumentResolver.UNRESOLVED;
 		}
 		
+		HttpServletRequest request =  (HttpServletRequest)webRequest.getNativeRequest();
+		HttpSession session = request.getSession();
+		if(session == null) {
+			return null;
+		}
 		
-		return null;
+		return session.getAttribute("authUser");
 	}
 
 }
