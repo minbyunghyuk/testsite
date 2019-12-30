@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bigdata2019.mysite.service.GuestbookService;
 import com.bigdata2019.mysite.vo.GuestbookVo;
+import com.bigdata2019.security.Auth;
 
 @Controller
 @RequestMapping( "/guestbook" )
